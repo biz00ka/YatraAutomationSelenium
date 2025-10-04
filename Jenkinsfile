@@ -29,7 +29,7 @@ pipeline {
                         // Define the work for each parallel branch/shard
                         branches[branchName] = {
                             // Run on any available Jenkins agent with the 'maven' label
-                            node('maven') {
+                            node('any') {
                                 stage("Run ${branchName}") {
                                     // 3. Pass the specific browser name and TestNG group to Maven
                                     // -Dbrowser is read by your DriverFactory.java
