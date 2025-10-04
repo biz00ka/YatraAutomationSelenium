@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+            // Use the name you gave the Maven installation in Global Tool Configuration
+            maven 'MAVEN_HOME'
+        }
+
     parameters {
         // Updated to use a comma-separated list of browsers
         string(name: 'BROWSERS', defaultValue: 'chrome,firefox', description: 'Comma-separated list of browsers for parallel run (e.g., chrome,firefox).')
