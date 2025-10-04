@@ -13,11 +13,12 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
+            // [REMOVE] or simplify this stage if it was only for checkout
+            stage('Initialize') {
+                steps {
+                    echo "Starting parallel test initialization."
+                }
             }
-        }
 
         stage('Parallel Cross-Browser Execution') {
             steps {
@@ -35,6 +36,10 @@ pipeline {
                         branches[branchName] = {
                             // Run on any available Jenkins agent with the 'maven' label
                             node('built-in') {
+                                stage("Setup ${branchName}") {
+
+                                    checkout scm
+                                }
                                 stage("Run ${branchName}") {
                                     // 3. Pass the specific browser name and TestNG group to Maven
                                     // -Dbrowser is read by your DriverFactory.java
