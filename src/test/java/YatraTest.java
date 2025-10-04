@@ -4,31 +4,39 @@ import org.testng.annotations.Test;
 import org.utils.DateUtils;
 import java.text.NumberFormat;
 import java.util.*;
-
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 public class YatraTest extends BaseTest{
 
-
-
-
-
     @Test(groups = "smoke")
-    public void selectMinPriceDate() throws InterruptedException {
+    public void selectMinPriceDate() {
         getDriver().get(propReaderUtil.getPropValue("yatraurl"));
-        getDriver().findElement(By.xpath("//img[@alt='cross']")).click();
 
-        getDriver().findElement(By.xpath("//span[contains(text(),'Departure Date')]/../..")).click();
-        Thread.sleep(2000);
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+
+        By crossImg = By.xpath("//img[@alt='cross']");
+        wait.until(ExpectedConditions.elementToBeClickable(crossImg)).click();
+
+        By departureDateBox = By.xpath("//span[contains(text(),'Departure Date')]/../..");
+        wait.until(ExpectedConditions.elementToBeClickable(departureDateBox)).click();
+
+        By calendarElement = By.xpath("//div[@aria-label='month  " + DateUtils.getCurrentMonth("yyyy-MM") + "']");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(calendarElement));
+
         String currMonth= DateUtils.getCurrentMonth("yyyy-MM");
-
         String nextMonth=DateUtils.getNextMonth("yyyy-MM");
 
         selectMinFareForMonth(currMonth);
-        Thread.sleep(2000);
 
-        getDriver().findElement(By.xpath("//span[contains(text(),'Return Date')]/../..")).click();
-        Thread.sleep(2000);
+
+        By returnDateBox = By.xpath("//span[contains(text(),'Return Date')]/../..");
+        wait.until(ExpectedConditions.elementToBeClickable(returnDateBox)).click();
+
+        By nextMonthCalendar = By.xpath("//div[@aria-label='month  " + nextMonth + "']");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(nextMonthCalendar));
+
         selectMinFareForMonth(nextMonth);
-
     }
 
     public void selectMinFareForMonth(String month)

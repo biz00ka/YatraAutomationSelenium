@@ -4,6 +4,9 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.utils.DateUtils;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
 import java.util.List;
 import java.util.Random;
@@ -11,25 +14,36 @@ import java.util.Random;
 public class BookingTest extends BaseTest{
 
     @Test(groups = "smoke")
-    public void selectHotel() throws InterruptedException {
+    public void selectHotel() { // Removed 'throws InterruptedException' as sleep is gone
         getDriver().get(propReaderUtil.getPropValue("bookingurl"));
-        Thread.sleep(3000);
-        getDriver().findElement(By.xpath("//input[@name='ss']")).sendKeys("Mussoorie");
-        Thread.sleep(3000);
-        getDriver().findElement(By.xpath("//div[@id='autocomplete-results']//li[@id='autocomplete-result-0']")).click();
+
+        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15)); // 15-second timeout
+
+        By destinationInput = By.xpath("//input[@name='ss']");
+
+        wait.until(ExpectedConditions.elementToBeClickable(destinationInput));
+
+        getDriver().findElement(destinationInput).sendKeys("Mussoorie");
+
+        By autocompleteResult = By.xpath("//div[@id='autocomplete-results']//li[@id='autocomplete-result-0']");
+        wait.until(ExpectedConditions.elementToBeClickable(autocompleteResult));
+
+        getDriver().findElement(autocompleteResult).click();
 
         String currMonth= DateUtils.getCurrentMonth("MMMM uuuu");
 
-        //h3[contains(text(),'October')]/..//span[@aria-pressed='false' and not(contains(@aria-disabled,'true'))]
         selectDates(currMonth);
 
         String nextMonth= DateUtils.getNextMonth("MMMM uuuu");
         selectDates(nextMonth);
 
         getDriver().findElement(By.xpath("//span[contains(text(),'Search')]")).click();
-        Thread.sleep(2000);
 
-        Assert.assertTrue(getDriver().findElement(By.xpath("//h1[contains(text(),'properties found')]")).isDisplayed(),"Assertion failed for property search.");
+        By resultsHeader = By.xpath("//h1[contains(text(),'properties found')]");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(resultsHeader));
+
+
+        Assert.assertTrue(getDriver().findElement(resultsHeader).isDisplayed(),"Assertion failed for property search.");
 
         WebElement desiredElement=getDriver().findElement(By.xpath("//div[contains(text(),'WelcomHeritage Kasmanda Palace')]"));
 
@@ -38,7 +52,6 @@ public class BookingTest extends BaseTest{
         js.executeScript("arguments[0].scrollIntoView(true)",desiredElement);
 
         desiredElement.click();
-        Thread.sleep(2000);
 
     }
 
