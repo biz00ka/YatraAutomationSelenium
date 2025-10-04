@@ -1,9 +1,14 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="Yatra Automation Tests" parallel="classes" thread-count="4">
-    <test name="Test name for Yatra">
+    <test name="SmokeTests">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
         <classes>
-            <class name="YatraTest" />
-            <class name="BookingTest" />
+            <class name="BookingTest"/>
+            <class name="YatraTest"/>
         </classes>
     </test>
 </suite>

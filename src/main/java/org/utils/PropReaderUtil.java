@@ -15,6 +15,7 @@ public class PropReaderUtil {
 
         if (inputStream != null) {
             properties.load(inputStream);
+            System.out.println("Loaded properties from " + resourceName);
         } else {
             // Throw a meaningful exception if the resource is not found
             throw new FileNotFoundException("Property file '" + resourceName + "' not found in the classpath.");
