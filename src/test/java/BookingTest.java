@@ -12,11 +12,11 @@ public class BookingTest extends BaseTest{
 
     @Test(groups = "smoke")
     public void selectHotel() throws InterruptedException {
-        driver.get(propReaderUtil.getPropValue("bookingurl"));
+        getDriver().get(propReaderUtil.getPropValue("bookingurl"));
         Thread.sleep(3000);
-        driver.findElement(By.xpath("//input[@name='ss']")).sendKeys("Mussoorie");
+        getDriver().findElement(By.xpath("//input[@name='ss']")).sendKeys("Mussoorie");
         Thread.sleep(3000);
-        driver.findElement(By.xpath("//div[@id='autocomplete-results']//li[@id='autocomplete-result-0']")).click();
+        getDriver().findElement(By.xpath("//div[@id='autocomplete-results']//li[@id='autocomplete-result-0']")).click();
 
         String currMonth= DateUtils.getCurrentMonth("MMMM uuuu");
 
@@ -26,14 +26,14 @@ public class BookingTest extends BaseTest{
         String nextMonth= DateUtils.getNextMonth("MMMM uuuu");
         selectDates(nextMonth);
 
-        driver.findElement(By.xpath("//span[contains(text(),'Search')]")).click();
+        getDriver().findElement(By.xpath("//span[contains(text(),'Search')]")).click();
         Thread.sleep(2000);
 
-        Assert.assertTrue(driver.findElement(By.xpath("//h1[contains(text(),'properties found')]")).isDisplayed(),"Assertion failed for property search.");
+        Assert.assertTrue(getDriver().findElement(By.xpath("//h1[contains(text(),'properties found')]")).isDisplayed(),"Assertion failed for property search.");
 
-        WebElement desiredElement=driver.findElement(By.xpath("//div[contains(text(),'WelcomHeritage Kasmanda Palace')]"));
+        WebElement desiredElement=getDriver().findElement(By.xpath("//div[contains(text(),'WelcomHeritage Kasmanda Palace')]"));
 
-        JavascriptExecutor js= (JavascriptExecutor) driver;
+        JavascriptExecutor js= (JavascriptExecutor) getDriver();
 
         js.executeScript("arguments[0].scrollIntoView(true)",desiredElement);
 
@@ -45,7 +45,7 @@ public class BookingTest extends BaseTest{
     public void selectDates(String month)
     {
         String xpath="//h3[contains(text(),'"+month+"')]/..//span[@aria-pressed='false' and not(contains(@aria-disabled,'true'))]";
-        List<WebElement> availableDates=driver.findElements(By.xpath(xpath));
+        List<WebElement> availableDates=getDriver().findElements(By.xpath(xpath));
         availableDates.get(new Random().nextInt(availableDates.size())).click();
     }
 }

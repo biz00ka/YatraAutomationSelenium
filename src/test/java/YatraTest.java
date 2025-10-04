@@ -1,12 +1,8 @@
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import org.utils.DateUtils;
-
 import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class YatraTest extends BaseTest{
@@ -17,10 +13,10 @@ public class YatraTest extends BaseTest{
 
     @Test(groups = "smoke")
     public void selectMinPriceDate() throws InterruptedException {
-        driver.get(propReaderUtil.getPropValue("yatraurl"));
-        driver.findElement(By.xpath("//img[@alt='cross']")).click();
+        getDriver().get(propReaderUtil.getPropValue("yatraurl"));
+        getDriver().findElement(By.xpath("//img[@alt='cross']")).click();
 
-        driver.findElement(By.xpath("//span[contains(text(),'Departure Date')]/../..")).click();
+        getDriver().findElement(By.xpath("//span[contains(text(),'Departure Date')]/../..")).click();
         Thread.sleep(2000);
         String currMonth= DateUtils.getCurrentMonth("yyyy-MM");
 
@@ -29,7 +25,7 @@ public class YatraTest extends BaseTest{
         selectMinFareForMonth(currMonth);
         Thread.sleep(2000);
 
-        driver.findElement(By.xpath("//span[contains(text(),'Return Date')]/../..")).click();
+        getDriver().findElement(By.xpath("//span[contains(text(),'Return Date')]/../..")).click();
         Thread.sleep(2000);
         selectMinFareForMonth(nextMonth);
 
@@ -40,7 +36,7 @@ public class YatraTest extends BaseTest{
         String path="//div[@aria-label='month  "+month+"']//div[@aria-disabled='false' and not(contains(@class,'outside-month'))]//span[contains(text(),'₹')]";
 
         List<WebElement> fareLists=
-                driver.findElements(By.xpath(path));
+                getDriver().findElements(By.xpath(path));
 
         List<Integer> formattedFares=fareLists.stream().map(e-> Integer.valueOf(e.getText().replaceAll("\\D",""))).toList();
 
@@ -57,7 +53,7 @@ public class YatraTest extends BaseTest{
 
         System.out.println("Minimum Formatted fares is "+minimumFare);
 
-        List<WebElement> minimumFareList=driver.findElements(By.xpath("//span[contains(text(),'"+minimumFare+"')]"));
+        List<WebElement> minimumFareList=getDriver().findElements(By.xpath("//span[contains(text(),'"+minimumFare+"')]"));
 
         minimumFareList.get(new Random().nextInt(minimumFareList.size())).click();
 

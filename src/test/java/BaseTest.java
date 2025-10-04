@@ -10,11 +10,8 @@ import java.io.IOException;
 
 public class BaseTest {
 
-    protected WebDriver driver;
-    // 1. MAKE PropReaderUtil STATIC
     protected static PropReaderUtil propReaderUtil;
 
-    // 2. USE A STATIC BLOCK FOR FAIL-SAFE INITIALIZATION
     static {
         try {
             // Initialize utility here, before any thread starts
@@ -23,21 +20,17 @@ public class BaseTest {
             // If initialization fails, log it and terminate gracefully
             System.err.println("FATAL ERROR: Could not load test.properties from classpath.");
             e.printStackTrace();
-            // Optional: throw a RuntimeException to stop all TestNG execution immediately
             throw new RuntimeException("Failed to initialize PropReaderUtil due to file error.", e);
         }
     }
 
+    public WebDriver getDriver() {
+        return DriverFactory.getInstance().getDriver();
+    }
+
     @BeforeClass
-    public void setup() throws IOException {
-        // No need to initialize propReaderUtil again, it's already static and ready
-        // The driver initialization is now the only thing left.
-        try {
-            driver = DriverFactory.getInstance().getDriver();
-        } catch (Exception e) {
-            System.err.println("Failed to initialize WebDriver: " + e.getMessage());
-            throw new RuntimeException("Failed to initialize WebDriver", e);
-        }
+    public void setup() {
+        DriverFactory.getInstance().getDriver();
     }
 
     @AfterClass
