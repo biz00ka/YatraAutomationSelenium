@@ -20,8 +20,10 @@ public class BaseTest {
     public void setup() {
         try {
             // Initialize PropReaderUtil first to ensure it's available
+            System.out.println("Loading up property file.");
             propReaderUtil = new PropReaderUtil("test.properties");
             // Initialize WebDriver using DriverFactory
+            System.out.println("Initialising WebDriver instance.");
             driver = DriverFactory.getInstance().getDriver();
         } catch (IOException e) {
             System.err.println("Failed to load test.properties: " + e.getMessage());
