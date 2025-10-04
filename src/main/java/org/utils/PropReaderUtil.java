@@ -1,19 +1,24 @@
 package org.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 public class PropReaderUtil {
 
     private Properties properties;
 
-    public PropReaderUtil (String path) throws IOException {
-        this.properties= new Properties();
-        properties.load(new FileInputStream(path));
+    public PropReaderUtil (String resourceName) throws IOException {
+        this.properties = new Properties();
 
+        // Use ClassLoader to get the resource stream reliably
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName);
+
+        if (inputStream != null) {
+            properties.load(inputStream);
+        } else {
+            // Throw a meaningful exception if the resource is not found
+            throw new FileNotFoundException("Property file '" + resourceName + "' not found in the classpath.");
+        }
     }
 
     public String getPropValue(String key)

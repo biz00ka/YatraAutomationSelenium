@@ -21,7 +21,7 @@ public class BaseTest {
     public void setup() throws IOException {
         driver=DriverFactory.getInstance().getDriver();
 
-        propReaderUtil=new PropReaderUtil("./src/main/resources/test.properties");
+        propReaderUtil=new PropReaderUtil("test.properties");
 
     }
 
