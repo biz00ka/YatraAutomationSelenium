@@ -19,9 +19,9 @@ public class BaseTest {
 
     @BeforeClass
     public void setup() throws IOException {
-        driver=DriverFactory.getInstance().getDriver();
 
         propReaderUtil=new PropReaderUtil("test.properties");
+        driver=DriverFactory.getInstance().getDriver();
 
     }
 
