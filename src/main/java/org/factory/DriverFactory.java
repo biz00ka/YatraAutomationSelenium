@@ -8,6 +8,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class DriverFactory {
         System.out.println("Browser name provided is "+browser);
         switch (browser) {
             case "chrome":
+                WebDriverManager.chromedriver().setup();
                 Map<String, Object> prefs = new HashMap<>();
                 prefs.put("profile.default_content_setting_values.notifications", 2);
                 ChromeOptions chromeOptions = new ChromeOptions();
@@ -35,6 +37,7 @@ public class DriverFactory {
                 localDriver.set(new ChromeDriver(chromeOptions));
                 break;
             case "firefox":
+                WebDriverManager.firefoxdriver().setup();
                 FirefoxProfile profile = new FirefoxProfile();
                 profile.setPreference("dom.popup_maximum", 0);
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
