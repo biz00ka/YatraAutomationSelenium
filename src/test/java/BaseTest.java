@@ -1,33 +1,39 @@
+// REVISED BaseTest.java
+
 import org.factory.DriverFactory;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.utils.PropReaderUtil;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BaseTest {
 
     protected WebDriver driver;
-    protected ChromeOptions options;
+    // 1. MAKE PropReaderUtil STATIC
+    protected static PropReaderUtil propReaderUtil;
 
-    protected PropReaderUtil propReaderUtil;
-    @BeforeClass
-    public void setup() {
+    // 2. USE A STATIC BLOCK FOR FAIL-SAFE INITIALIZATION
+    static {
         try {
-            // Initialize PropReaderUtil first to ensure it's available
-            System.out.println("Loading up property file.");
+            // Initialize utility here, before any thread starts
             propReaderUtil = new PropReaderUtil("test.properties");
-            // Initialize WebDriver using DriverFactory
-            System.out.println("Initialising WebDriver instance.");
-            driver = DriverFactory.getInstance().getDriver();
         } catch (IOException e) {
-            System.err.println("Failed to load test.properties: " + e.getMessage());
-            throw new RuntimeException("Failed to initialize PropReaderUtil due to missing or inaccessible test.properties", e);
+            // If initialization fails, log it and terminate gracefully
+            System.err.println("FATAL ERROR: Could not load test.properties from classpath.");
+            e.printStackTrace();
+            // Optional: throw a RuntimeException to stop all TestNG execution immediately
+            throw new RuntimeException("Failed to initialize PropReaderUtil due to file error.", e);
+        }
+    }
+
+    @BeforeClass
+    public void setup() throws IOException {
+        // No need to initialize propReaderUtil again, it's already static and ready
+        // The driver initialization is now the only thing left.
+        try {
+            driver = DriverFactory.getInstance().getDriver();
         } catch (Exception e) {
             System.err.println("Failed to initialize WebDriver: " + e.getMessage());
             throw new RuntimeException("Failed to initialize WebDriver", e);
@@ -35,13 +41,8 @@ public class BaseTest {
     }
 
     @AfterClass
-    public void tearDown() {
-        try {
-            if (DriverFactory.getInstance() != null) {
-                DriverFactory.getInstance().tearDown();
-            }
-        } catch (Exception e) {
-            System.err.println("Error during tearDown: " + e.getMessage());
-        }
+    public void tearDown()
+    {
+        DriverFactory.getInstance().tearDown();
     }
 }
