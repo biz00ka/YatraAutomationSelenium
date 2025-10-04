@@ -8,7 +8,11 @@ pipeline {
 
     parameters {
         // Updated to use a comma-separated list of browsers
-        string(name: 'BROWSERS', defaultValue: 'chrome,firefox', description: 'Comma-separated list of browsers for parallel run (e.g., chrome,firefox).')
+        choice(
+                name: 'BROWSERS',
+                choices: 'chrome\nfirefox\nsafari', // Options are separated by a newline character (\n)
+                description: 'Select the browser(s) for parallel run.'
+            )
         string(name: 'TEST_GROUPS', defaultValue: 'smoke', description: 'TestNG groups to include (e.g., smoke,regression).')
     }
 
