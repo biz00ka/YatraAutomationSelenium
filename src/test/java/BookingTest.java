@@ -23,10 +23,11 @@ public class BookingTest extends BaseTest{
 
         wait.until(ExpectedConditions.elementToBeClickable(destinationInput));
 
-        getDriver().findElement(destinationInput).sendKeys("Mussoorie");
+       // getDriver().findElement(destinationInput).sendKeys("Mussoorie");
+        typeSlowly(getDriver().findElement(destinationInput),"Mussoorie",1000);
 
         By autocompleteResult = By.xpath("//div[@id='autocomplete-results']//li[@id='autocomplete-result-0']");
-        wait.until(ExpectedConditions.elementToBeClickable(autocompleteResult));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(autocompleteResult));
 
         getDriver().findElement(autocompleteResult).click();
 

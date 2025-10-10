@@ -2,6 +2,7 @@
 
 import org.factory.DriverFactory;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.utils.PropReaderUtil;
@@ -37,5 +38,23 @@ public class BaseTest {
     public void tearDown()
     {
         DriverFactory.getInstance().tearDown();
+    }
+
+    protected void typeSlowly(WebElement element, String text, int delayMs) {
+        // Clear the field first
+        element.clear();
+
+        for (char character : text.toCharArray()) {
+            // Send one character
+            element.sendKeys(String.valueOf(character));
+            try {
+                // Pause for the specified delay
+                Thread.sleep(delayMs);
+            } catch (InterruptedException e) {
+                // Restore the interrupted status
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Typing interrupted", e);
+            }
+        }
     }
 }
