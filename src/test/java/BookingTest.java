@@ -51,7 +51,14 @@ public class BookingTest extends BaseTest{
 
         JavascriptExecutor js= (JavascriptExecutor) getDriver();
 
-        js.executeScript("arguments[0].scrollIntoView(true)",desiredElement);
+        String smoothScrollScript = "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});";
+        js.executeScript(smoothScrollScript, desiredElement);
+
+        try {
+            Thread.sleep(1000); // 1-second pause to let the smooth scroll finish
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
         desiredElement.click();
 
