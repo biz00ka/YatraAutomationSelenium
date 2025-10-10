@@ -13,18 +13,19 @@ import java.util.Random;
 
 public class BookingTest extends BaseTest{
 
+    WebDriverWait wait;
     @Test(groups = "smoke")
     public void selectHotel() { // Removed 'throws InterruptedException' as sleep is gone
         getDriver().get(propReaderUtil.getPropValue("bookingurl"));
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15)); // 15-second timeout
+        wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15)); // 15-second timeout
 
         By destinationInput = By.xpath("//input[@name='ss']");
 
         wait.until(ExpectedConditions.elementToBeClickable(destinationInput));
 
        // getDriver().findElement(destinationInput).sendKeys("Mussoorie");
-        typeSlowly(getDriver().findElement(destinationInput),"Mussoorie",1000);
+        typeSlowly(getDriver().findElement(destinationInput),"Mussoorie",500);
 
         By autocompleteResult = By.xpath("//div[@id='autocomplete-results']//li[@id='autocomplete-result-0']");
         wait.until(ExpectedConditions.visibilityOfElementLocated(autocompleteResult));
@@ -53,6 +54,8 @@ public class BookingTest extends BaseTest{
         js.executeScript("arguments[0].scrollIntoView(true)",desiredElement);
 
         desiredElement.click();
+
+        System.out.println("Booking Test completed.");
 
     }
 
